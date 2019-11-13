@@ -76,6 +76,7 @@ class TFRecordExporter:
             for lod in range(self.resolution_log2 - 1):
                 tfr_file = self.tfr_prefix + '-r%02d.tfrecords' % (self.resolution_log2 - lod)
                 self.tfr_writers.append(tf.python_io.TFRecordWriter(tfr_file, tfr_opt))
+
         assert img.shape == self.shape
         for lod, tfr_writer in enumerate(self.tfr_writers):
             if lod:
@@ -520,6 +521,7 @@ def create_from_images(tfrecord_dir, image_dir, shuffle):
         order = tfr.choose_shuffled_order() if shuffle else np.arange(len(image_filenames))
         for idx in range(order.size):
             img = np.asarray(PIL.Image.open(image_filenames[order[idx]]))
+            print(image_filenames[order[idx]])
             if channels == 1:
                 img = img[np.newaxis, :, :] # HW => CHW
             else:
